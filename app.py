@@ -6,6 +6,7 @@ import requests
 
 app = Flask(__name__)
 
+# Criar diretório 'output' se não existir
 if not os.path.exists('output'):
     os.makedirs('output')
 
@@ -28,11 +29,11 @@ def process_audio():
         audio_segment = AudioSegment.from_file(audio_path)
         silence_before = AudioSegment.silent(duration=subs[i].start.ordinal)
         combined_audio += silence_before + audio_segment
-    
+
     # Exportar áudio combinado
     output_audio_path = 'output/final_audio.mp3'
     combined_audio.export(output_audio_path, format='mp3')
-    
+
     return jsonify({'audio_file': output_audio_path})
 
 def download_file(url, path):
@@ -41,5 +42,7 @@ def download_file(url, path):
         file.write(response.content)
     return path
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    # Usar o PORT fornecido pelo Heroku
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
