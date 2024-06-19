@@ -10,6 +10,10 @@ app = Flask(__name__)
 if not os.path.exists('output'):
     os.makedirs('output')
 
+@app.route('/')
+def home():
+    return 'Bem-vindo ao aplicativo de processamento de áudio!'
+
 @app.route('/process_audio', methods=['POST'])
 def process_audio():
     data = request.json
